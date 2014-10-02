@@ -1,0 +1,35 @@
+(defun cci-list-decimal-add (n1 n2)
+  (let ((carry)
+	(sum)
+	(digit)
+	(answer (list nil))
+	(current)
+	(second-last))
+    (setq current answer)
+    (while (or n1 n2)
+      (let ((r (if n1 (car n1) 0))
+	    (l (if n2 (car n2) 0)))
+	(setq sum (+ r l (if carry 1 0))
+	      carry (<= 10 sum)
+	      digit (if carry (- sum 10) sum)))
+
+      (if (not (car current))
+	  (setcar current digit)
+	(progn (setcdr current (list digit))
+	       (setq current (cdr current))))
+
+      (setq n1 (if n1 (cdr n1) nil)
+	    n2 (if n2 (cdr n2) nil)))
+    answer))
+
+(cci-list-decimal-add '(7 1 6) '(5 9 2))
+;; =>(2 1 9)
+
+(cci-list-decimal-add '(7 1 6) '(5 9))
+;; => (2 1 7)
+
+(cci-list-decimal-add '(7 1 6) '(5))
+;; => (2 2 6)
+
+(cci-list-decimal-add '(5) '(7 1 6))
+;; => (2 2 6)
