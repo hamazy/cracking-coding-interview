@@ -1,0 +1,73 @@
+(defun cci-stack-with-min-create ()
+  (cons nil nil))
+
+(defun cci-stack-with-min-push (stack value)
+  (let ((min (car stack))
+	(values (cdr stack)))
+    (setcdr stack (cons value values))
+    (when (or (not min) (> (car min) value))
+      (setcar stack (cdr stack)))))
+
+(defun cci-stack-with-min-pop (stack)
+  (let ((min (car stack))
+	(values (cdr stack)))
+    (let ((min-needs-update (eq min values))
+	  (result (car values)))
+      (setcdr stack (cdr values))
+      (when min-needs-update
+	(setcar stack (cdr stack))
+	(let ((index (cdr stack))
+	      (min (cdr stack)))
+	  (while (cdr index)
+	    (when (< (car (cdr index)) (car min))
+	      (setcar stack (cdr index)))
+	    (setq index (cdr index)))))
+      result)))
+
+(defun cci-stack-with-min-peek (stack)
+  (when (cdr stack)
+    (car (cdr stack))))
+
+(defun cci-stack-with-min-min (stack)
+  (when (car stack)
+    (car (car stack))))
+
+(let ((stack (cci-stack-with-min-create)))
+  (cci-stack-with-min-push stack 0)
+  (cci-stack-with-min-push stack 1)
+  (cci-stack-with-min-push stack 2)
+  (and (eq (cci-stack-with-min-min stack) 0)
+       (eq (cci-stack-with-min-peek stack) 2)
+       (eq (cci-stack-with-min-pop stack) 2)
+
+       (eq (cci-stack-with-min-min stack) 0)
+       (eq (cci-stack-with-min-peek stack) 1)
+       (eq (cci-stack-with-min-pop stack) 1)
+
+       (eq (cci-stack-with-min-min stack) 0)
+       (eq (cci-stack-with-min-peek stack) 0)
+       (eq (cci-stack-with-min-pop stack) 0)
+
+       (eq (cci-stack-with-min-min stack) nil)
+       (eq (cci-stack-with-min-peek stack) nil)
+       (eq (cci-stack-with-min-pop stack) nil)))
+
+(let ((stack (cci-stack-with-min-create)))
+  (cci-stack-with-min-push stack 2)
+  (cci-stack-with-min-push stack 1)
+  (cci-stack-with-min-push stack 0)
+  (and (eq (cci-stack-with-min-min stack) 0)
+       (eq (cci-stack-with-min-peek stack) 0)
+       (eq (cci-stack-with-min-pop stack) 0)
+
+       (eq (cci-stack-with-min-min stack) 1)
+       (eq (cci-stack-with-min-peek stack) 1)
+       (eq (cci-stack-with-min-pop stack) 1)
+
+       (eq (cci-stack-with-min-min stack) 2)
+       (eq (cci-stack-with-min-peek stack) 2)
+       (eq (cci-stack-with-min-pop stack) 2)
+
+       (eq (cci-stack-with-min-min stack) nil)
+       (eq (cci-stack-with-min-peek stack) nil)
+       (eq (cci-stack-with-min-pop stack) nil)))
