@@ -10,14 +10,26 @@
       (setcar stack (cdr (car stack)))
       result)))
 
+(defun cci-stack-peek (stack)
+  (when (car stack)
+    (car (car stack))))
+
+(defun cci-stack-emptyp (stack)
+  (not (car stack)))
+
 (defun cci-stack-as-list (stack)
   (car stack))
 
 (let ((stack (cci-stack-create)))
-  (cci-stack-push stack 0)
-  (cci-stack-push stack 1)
-  (and (eq (cci-stack-pop stack) 1)
-       (eq (cci-stack-pop stack) 0)))
+  (let ((empty-at-first (cci-stack-emptyp stack)))
+    (cci-stack-push stack 0)
+    (cci-stack-push stack 1)
+    (and empty-at-first
+	 (eq (cci-stack-peek stack) 1)
+	 (eq (cci-stack-pop stack) 1)
+	 (eq (cci-stack-peek stack) 0)
+	 (eq (cci-stack-pop stack) 0)
+	 (cci-stack-emptyp stack))))
 
 (defun cci-hanoi-move (n src-stack dst-stack buf-stack)
   (cond ((= 0 n) nil)
