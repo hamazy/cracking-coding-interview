@@ -1,6 +1,9 @@
 (defun cci-node-create (value)
   (cons nil (cons value nil)))
 
+(defun cci-node-value (node)
+  (car (cdr node)))
+
 (defun cci-node-connect (from to)
   (if (car from)
       (setcar from (cons to (car from)))
