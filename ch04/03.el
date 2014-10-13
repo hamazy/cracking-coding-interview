@@ -1,3 +1,14 @@
+(defun cci-node-set-right-tree (node tree)
+  (setcar node
+	  (cons (when (car node)
+		  (caar node))
+		(cons tree nil))))
+
+(defun cci-node-set-left-tree (node tree)
+  (setcar node
+	  (cons tree (when (car node)
+		       (cdar node)))))
+
 (defun cci-bst-create (array)
   (when (< 0 (length array))
     (let ((middle (/ (length array) 2)))
@@ -23,8 +34,8 @@
 	      (aset right-array (- i (1+ middle)) (aref array i))
 	      (setq i (1+ i)))
 	    (setq right-tree (cci-bst-create right-array))))
-	(cci-node-connect node right-tree)
-	(cci-node-connect node left-tree)
+	(cci-node-set-right-tree node right-tree)
+	(cci-node-set-left-tree node left-tree)
 	node))))
 
 (cci-bst-create [0 1 2 3 4])
