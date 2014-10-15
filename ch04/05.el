@@ -8,13 +8,13 @@
   (when tree
     (let ((right-tree (cci-tree-right-tree tree)))
       (if right-tree (cci-btree-max right-tree)
-	(cci-node-value tree)))))
+	tree))))
 
 (defun cci-btree-min (tree)
   (when tree
     (let ((left-tree (cci-tree-left-tree tree)))
       (if left-tree (cci-btree-min left-tree)
-	(cci-node-value tree)))))
+	tree))))
 
 (defun cci-bstp (tree)
   "Return non-nil if a given binary TREE is a binary search tree or nil
@@ -23,8 +23,8 @@ otherwise."
       (let ((left-tree (cci-tree-left-tree tree))
 	    (right-tree (cci-tree-right-tree tree))
 	    (my-value (cci-node-value tree)))
-	(let ((left-max (cci-btree-max left-tree))
-	      (right-min (cci-btree-min right-tree)))
+	(let ((left-max (cci-node-value (cci-btree-max left-tree)))
+	      (right-min (cci-node-value (cci-btree-min right-tree))))
 	  (and (if left-tree (<= left-max my-value) t)
 	       (if right-tree (<= my-value right-min) t)
 	       (cci-bstp left-tree)
