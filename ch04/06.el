@@ -4,6 +4,12 @@
 (defun cci-node-value (node)
   (plist-get node 'value))
 
+(defun cci-node-visitedp (node)
+  (plist-get node 'visited))
+
+(defun cci-node-visit (node)
+  (plist-put node 'visited t))
+
 (defun cci-node-right-tree (tree)
   (plist-get tree 'right))
 
